@@ -9,6 +9,9 @@ window.DREAM_CONFIG = {
   HOURS: "평일 · 토요일 · 일요일 10:00 - 21:00",
   KAKAO_CHANNEL_URL: "",   // 카카오톡 채널 주소(예: https://pf.kakao.com/_xxxx). 비워 두면 버튼이 숨겨집니다.
 
+  // ---- 텔레그램 알림 (Cloudflare Pages 환경 변수 설정 후 true) ----
+  TELEGRAM_ENABLED: true,
+
   // ---- EmailJS (상담 신청 메일) ----
   EMAILJS_PUBLIC_KEY: "",    // Account > General > Public Key
   EMAILJS_SERVICE_ID: "",    // Email Services 의 Service ID

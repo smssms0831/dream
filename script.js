@@ -109,7 +109,7 @@
     var left = cooldownLeft();
     if (left > 0) { setStatus("잠시 후 다시 신청해 주세요. (" + left + "초 후 가능)", "err"); return; }
 
-    if (!isConfigured()) {
+    if (!isConfigured() && !cfg.TELEGRAM_ENABLED) {
       setStatus("온라인 접수가 준비 중입니다. 죄송하지만 전화(" + (cfg.PHONE || "") + ")로 문의해 주세요.", "err");
       return;
     }
@@ -140,19 +140,29 @@
     submitBtn.disabled = true;
     submitBtn.textContent = "전송 중...";
 
-    emailjs
-      .send(cfg.EMAILJS_SERVICE_ID, cfg.EMAILJS_TEMPLATE_ID, params, { publicKey: cfg.EMAILJS_PUBLIC_KEY })
-      .then(function () {
+    // 텔레그램(서버 함수)과 이메일(EmailJS)을 함께 시도하고, 하나라도 성공하면 접수 완료로 처리합니다.
+    var viaTelegram = cfg.TELEGRAM_ENABLED
+      ? fetch("/api/apply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: name, phone: phone, grade: grade, subjects: subjects, date: date, inquiry: inquiry, sent_at: sentAt })
+        }).then(function (r) { if (!r.ok) throw new Error("telegram"); })
+      : Promise.reject(new Error("off"));
+    var viaEmail = isConfigured()
+      ? emailjs.send(cfg.EMAILJS_SERVICE_ID, cfg.EMAILJS_TEMPLATE_ID, params, { publicKey: cfg.EMAILJS_PUBLIC_KEY })
+      : Promise.reject(new Error("off"));
+
+    var settle = function (p) { return p.then(function () { return true; }, function () { return false; }); };
+    Promise.all([settle(viaTelegram), settle(viaEmail)]).then(function (res) {
+      if (res[0] || res[1]) {
         try { localStorage.setItem(COOLDOWN_KEY, String(Date.now())); } catch (err) {}
         form.reset();
         setStatus("상담 신청이 접수되었습니다. 확인 후 연락드릴게요!", "ok");
-      })
-      .catch(function () {
+      } else {
         setStatus("전송에 실패했습니다. 잠시 후 다시 시도하시거나 전화로 문의해 주세요.", "err");
-      })
-      .then(function () {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "상담 신청하기";
-      });
+      }
+      submitBtn.disabled = false;
+      submitBtn.textContent = "상담 신청하기";
+    });
   });
 })();
