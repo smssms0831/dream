@@ -7,17 +7,16 @@
   /* ---------- config.js 값을 화면에 채우기 ---------- */
   var binds = {
     phone: cfg.PHONE || "",
+    mobile: cfg.MOBILE || cfg.PHONE || "",
     address: cfg.ADDRESS || "",
-    addressDetail: cfg.ADDRESS_DETAIL || "",
-    hoursWeekday: cfg.HOURS_WEEKDAY || "",
-    hoursWeekend: cfg.HOURS_WEEKEND || ""
+    hours: cfg.HOURS || ""
   };
   Array.prototype.forEach.call(document.querySelectorAll("[data-bind]"), function (el) {
     el.textContent = binds[el.getAttribute("data-bind")] || "";
   });
-  var telDigits = (cfg.PHONE || "").replace(/[^\d+]/g, "");
   Array.prototype.forEach.call(document.querySelectorAll("[data-bind-tel]"), function (el) {
-    el.setAttribute("href", "tel:" + telDigits);
+    var num = el.getAttribute("data-bind-tel") === "mobile" ? binds.mobile : binds.phone;
+    el.setAttribute("href", "tel:" + num.replace(/[^\d+]/g, ""));
   });
 
   var kakaoBtn = document.getElementById("kakao-btn");
@@ -25,7 +24,7 @@
     kakaoBtn.href = cfg.KAKAO_CHANNEL_URL;
     kakaoBtn.hidden = false;
   }
-  var mapQuery = encodeURIComponent(cfg.ADDRESS && cfg.ADDRESS.indexOf("입력") === -1 ? cfg.ADDRESS : "드림국과사");
+  var mapQuery = encodeURIComponent(cfg.MAP_QUERY || cfg.ADDRESS || "드림국과사");
   document.getElementById("naver-map").href = "https://map.naver.com/p/search/" + mapQuery;
   document.getElementById("kakao-map").href = "https://map.kakao.com/?q=" + mapQuery;
   document.getElementById("year").textContent = new Date().getFullYear();

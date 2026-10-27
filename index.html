@@ -37,9 +37,9 @@
         <a href="#location">오시는 길</a>
       </nav>
       <div class="header-actions">
-        <a class="tel-pill" data-bind-tel href="tel:" aria-label="전화 상담">
+        <a class="tel-pill" data-bind-tel="mobile" href="tel:" aria-label="전화 상담">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
-          <span data-bind="phone"></span>
+          <span data-bind="mobile"></span>
         </a>
         <a href="#apply" class="btn btn-yellow btn-sm">상담신청</a>
         <button class="menu-btn" id="menu-btn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav">
@@ -184,7 +184,7 @@
             <strong data-bind="phone"></strong>
           </a>
           <a class="btn btn-kakao" id="kakao-btn" href="#" target="_blank" rel="noopener" hidden>카카오톡 채널로 문의</a>
-          <p class="hours"><span data-bind="hoursWeekday"></span><br><span data-bind="hoursWeekend"></span></p>
+          <p class="hours"><span data-bind="hours"></span></p>
         </div>
 
         <div class="card apply-card">
@@ -249,9 +249,9 @@
         </div>
         <div class="location-card">
           <dl class="info-list">
-            <div><dt>주소</dt><dd><span data-bind="address"></span><br><span class="muted" data-bind="addressDetail"></span></dd></div>
+            <div><dt>주소</dt><dd><span data-bind="address"></span></dd></div>
             <div><dt>전화</dt><dd><a data-bind-tel href="tel:"><span data-bind="phone"></span></a></dd></div>
-            <div><dt>운영시간</dt><dd><span data-bind="hoursWeekday"></span><br><span data-bind="hoursWeekend"></span></dd></div>
+            <div><dt>운영시간</dt><dd><span data-bind="hours"></span></dd></div>
           </dl>
           <div class="map-links">
             <a class="btn btn-white-line" id="naver-map" href="#" target="_blank" rel="noopener">네이버지도에서 보기</a>
